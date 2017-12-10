@@ -17,16 +17,18 @@ class App extends Component {
     request
     .get('http://localhost:4000/users')
     .end((err, res) => {
-      console.log(res.body);
-      this.setState({
-        users: res.body
-      })
+      if (res && res.body) {
+        console.log(res.body);
+        this.setState({
+          users: res.body
+        })
+      }
     });
   }
 
   render() {
     const users = this.state.users.map((user, index) => {
-      return <User key={user.id} user={user} edit={this.editHandler.bind(this)} remove={(event) => this.removeHandler(event, index)} />
+      return <User key={user.id} user={user} edit={this.editHandler.bind(this)} remove={(event) => this.removeHandler(index)} />
     });
 
     return (
@@ -62,7 +64,7 @@ class App extends Component {
       };
 
       request
-        .post('/users')
+        .post('http://localhost:4000/users')
         .send(data)
         .end((err, res) => {
           if (err || !res.ok) {
@@ -82,19 +84,18 @@ class App extends Component {
 
   }
 
-  removeHandler = (event, index) => {
-    const user = this.state.users.splice(index, 1);
-    console.log(user);
-    // request
-    //   .delete('/user/' + user[0].id)
-    //   //.send({ id: user[0].id })
-    //   .end((err, res) => {
-    //     if (err || !res.ok) {
-    //       alert('error');
-    //     } else {
-    //       console.log(res.body);
-    //     }
-    //   });
+  removeHandler = (userIndex) => {
+    const users = [...this.state.users];
+    const user = users.splice(userIndex, 1);
+    request
+      .delete('http://localhost:4000/user/' + user[0].id)
+      .end((err, res) => {
+        if (err || !res.ok) {
+          alert('error');
+        } else {
+          this.setState({users: users});
+        }
+      });
   }
 }
 
