@@ -43,8 +43,8 @@ class App extends Component {
           <tr>
             <th>Id</th>
             <th>User</th>
-            <th></th>
-            <th></th>
+            <th>City</th>
+            <th>State</th>
             <th><button onClick={this.addHandler.bind(this)}>Add</button></th>
           </tr>
         </thead>
