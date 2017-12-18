@@ -1,7 +1,6 @@
 import React from 'react';
 
 const Edit = (props) => {
-    console.log(props);
     return (
         <div>
             <h1>Edit User # {props.user.id}</h1>
