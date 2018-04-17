@@ -1,14 +1,27 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import User from './User/User';
 import Edit from './Edit/Edit';
 const request = require('superagent');
 
 class App extends Component {
-  state = {
-    users: [],
-    showEdit: false,
-    userToEdit: ''
-  };
+  // state = {
+  //   users: [{
+  //     id: 1,
+  //     first_name: 'Jorge',
+  //     last_name: 'Cortes',
+  //     city: 'Monterrey',
+  //     state: 'NL'
+  //   }, {
+  //     id: 2,
+  //     first_name: 'Diego',
+  //     last_name: 'Montes',
+  //     city: 'Chihuahua',
+  //     state: 'CUU'
+  //   }],
+  //   showEdit: false,
+  //   userToEdit: ''
+  // };
   // constructor() {
   //   super();
   //   this.state = {
@@ -16,20 +29,22 @@ class App extends Component {
   //   };
   // }
 
-  componentDidMount() {
-    request
-    .get('http://localhost:4000/users')
-    .end((err, res) => {
-      if (res && res.body) {
-        console.log(res.body);
-        this.setState({
-          users: res.body
-        })
-      }
-    });
-  }
+  // componentDidMount() {
+  //   request
+  //   .get('http://localhost:4000/users')
+  //   .end((err, res) => {
+  //     if (res && res.body) {
+  //       console.log(res.body);
+  //       this.setState({
+  //         users: res.body
+  //       })
+  //     }
+  //   });
+  // }
 
   render() {
+    console.log(this.props);
+
     const users = this.state.users.map((user, index) => {
       return <User key={user.id} user={user} edit={(event) => this.editHandler(event, user)} remove={(event) => this.removeHandler(index)} />
     });
@@ -162,4 +177,10 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(function mapStateToProps(state, props) {
+  return {
+    users: state.users,
+    showEdit: state.showEdit,
+    userToEdit: state.userToEdit
+  };
+})(App);
